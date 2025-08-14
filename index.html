@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aurelia Tradisia - Luxury Sculptures</title>
+    <meta name="description" content="Handcrafted sculptures for distinguished spaces. Three generations of artistry and passion from Rajasthan, India.">
+    <meta name="keywords" content="luxury sculptures, handcrafted art, Indian artisans, custom sculptures, luxury interiors">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzBBMEQxQSIvPgo8dGV4dCB4PSIxNiIgeT0iMjAiIGZvbnQtZmFtaWx5PSJzZXJpZiIgZm9udC1zaXplPSIxNCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNENEE1NzQiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkFUPC90ZXh0Pgo8L3N2Zz4K">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Aurelia Tradisia - Luxury Sculptures">
+    <meta property="og:description" content="Handcrafted sculptures for distinguished spaces. Three generations of artistry and passion from Rajasthan, India.">
+    <meta property="og:url" content="https://aureliatradisia.com">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- React & Dependencies -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        * {
+            letter-spacing: 0.01em;
+        }
+        
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #F8F9FC;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #D4A574;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8B7355;
+        }
+
+        /* Animation classes */
+        .fade-in {
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .slide-up {
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hover-lift {
+            transition: all 0.3s ease;
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #D4A574, #8B7355);
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #D4A574, #8B7355);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef, useMemo } = React;
+
+        // -------------------- Defaults --------------------
+        const DEFAULT_THEME = {
+            colors: {
+                background: "#FEFFFE",
+                primary: "#0A0D1A",
+                accent: "#D4A574",
+                secondary: "#8B7355",
+                muted: "#F8F9FC",
+                lightGold: "#F5F1E8",
+                text: "#0A0D1A",
+            },
+            typography: {
+                headingFamily: '"Playfair Display", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif',
+                bodyFamily: '"Inter", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif',
+                h1Size: 64,
+                h2Size: 40,
+                h3Size: 28,
+                bodySize: 18,
+            },
+        };
+
+        const DEFAULT_CONTENT = {
+            brand: {
+                name: "Aurelia Tradisia",
+                tagline: "Handcrafted sculptures for distinguished spaces",
+                ctaText: "Commission Your Piece",
+                logoText: "AT",
+            },
+            hero: {
+                title: "Masterful sculptures\nfor luxury interiors",
+                subtitle: "Where ancient artistry meets contemporary elegance",
+            },
+            whatWeDo: {
+                title: "Our Expertise",
+                subtitle: "Three pillars of excellence in luxury sculpture curation",
+                points: [
+                    {
+                        title: "Curation",
+                        text: "We source and curate museum-quality sculptures from master artisans across India, each piece selected for its exceptional craftsmanship and artistic merit.",
+                    },
+                    {
+                        title: "Commissioning",
+                        text: "Bespoke creations crafted to your exact specifications—scale, material, and narrative perfectly tailored to complement your architectural vision.",
+                    },
+                    {
+                        title: "Installation",
+                        text: "White-glove delivery and professional installation services for luxury residences, boutique hotels, and private galleries worldwide.",
+                    },
+                ],
+            },
+            gallery: {
+                title: "Signature Collections",
+                subtitle: "A curated selection of our most distinguished works",
+                images: [
+                    "https://images.unsplash.com/photo-1526318472351-c75fcf070305?q=80&w=1400&auto=format&fit=crop",
+                    "https://images.unsplash.com/photo-1549880338-65ddcdfd017b?q=80&w=1400&auto=format&fit=crop",
+                    "https://images.unsplash.com/photo-1580136579312-94651dfd596d?q=80&w=1400&auto=format&fit=crop",
+                    "https://images.unsplash.com/photo-1605170439002-0522d8fe15a1?q=80&w=1400&auto=format&fit=crop",
+                    "https://images.unsplash.com/photo-1549880186-7f1e54f7b84e?q=80&w=1400&auto=format&fit=crop",
+                    "https://images.unsplash.com/photo-1523419443865-cc1d2a05b06d?q=80&w=1400&auto=format&fit=crop",
+                ],
+            },
+            about: {
+                title: "Our Story",
+                subtitle: "Three generations of artistry and passion",
+                story: `Founded in 1985 by master craftsman Rajesh Sharma, Aurelia Tradisia began as a small workshop in Rajasthan, where traditional stone carving techniques have been passed down through generations. Today, under the guidance of his daughter Priya Sharma, we have evolved into India's premier luxury sculpture house.
+
+Our journey started with a simple belief: that every space deserves a piece of art that tells a story. We work exclusively with master artisans who have dedicated their lives to their craft, ensuring each sculpture carries the soul of its creator and the heritage of ancient Indian artistry.
+
+From our atelier in Jaipur, we collaborate with luxury hotels, private collectors, and discerning homeowners across the globe. Each commission is a partnership, where your vision meets our craftsmanship to create something truly extraordinary.`,
+                process: {
+                    title: "Our Process",
+                    steps: [
+                        {
+                            step: "01",
+                            title: "Consultation",
+                            description: "We begin with an in-depth discussion about your space, aesthetic preferences, and the story you wish to tell through sculpture."
+                        },
+                        {
+                            step: "02",
+                            title: "Design & Approval",
+                            description: "Our team creates detailed sketches and 3D renderings, ensuring every detail meets your vision before craftsmanship begins."
+                        },
+                        {
+                            step: "03",
+                            title: "Artisan Selection",
+                            description: "We match your project with the perfect master artisan, based on their specialization and the specific techniques required."
+                        },
+                        {
+                            step: "04",
+                            title: "Creation & Quality",
+                            description: "Each piece is meticulously crafted over weeks or months, with regular updates and quality checks throughout the process."
+                        },
+                        {
+                            step: "05",
+                            title: "Delivery & Installation",
+                            description: "White-glove shipping and professional installation ensure your sculpture arrives safely and is positioned perfectly."
+                        }
+                    ]
+                }
+            },
+            contact: {
+                title: "Begin Your Commission",
+                subtitle: "Share your vision—let's craft a masterpiece for your space",
+                email: "atelier@aureliatradisia.com",
+                phone: "+91 98765 43210",
+                instagram: "https://instagram.com/aureliatradisia",
+                linkedin: "https://linkedin.com/company/aurelia-tradisia",
+                address: "Heritage Craft Quarter\nJaipur, Rajasthan 302001\nIndia"
+            },
+        };
+
+        // -------------------- Utilities --------------------
+        const STORAGE_KEY = "aurelia_tradisia_enhanced_v1";
+        const ADMIN_TOKEN_KEY = "aurelia_admin_token";
+
+        function loadState() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (!raw) return { theme: DEFAULT_THEME, content: DEFAULT_CONTENT };
+                const parsed = JSON.parse(raw);
+                return {
+                    theme: { ...DEFAULT_THEME, ...parsed.theme },
+                    content: { ...DEFAULT_CONTENT, ...parsed.content },
+                };
+            } catch {
+                return { theme: DEFAULT_THEME, content: DEFAULT_CONTENT };
+            }
+        }
+
+        function saveState(state) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        }
+
+        function classNames(...v) {
+            return v.filter(Boolean).join(" ");
+        }
+
+        // -------------------- Admin System --------------------
+        function useAdmin() {
+            const [isAuthed, setIsAuthed] = useState(false);
+            useEffect(() => {
+                setIsAuthed(localStorage.getItem(ADMIN_TOKEN_KEY) === "ok");
+            }, []);
+            const login = (pw) => {
+                if (pw === "Aurelia@2025") {
+                    localStorage.setItem(ADMIN_TOKEN_KEY, "ok");
+                    setIsAuthed(true);
+                    return true;
+                }
+                return false;
+            };
+            const logout = () => {
+                localStorage.removeItem(ADMIN_TOKEN_KEY);
+                setIsAuthed(false);
+            };
+            return { isAuthed, login, logout };
+        }
+
+        // In-place editing component
+        function EditableText({ children, path, state, setState, multiline = false, className = "", style = {} }) {
+            const { isAuthed } = useAdmin();
+            const [editing, setEditing] = useState(false);
+            const [value, setValue] = useState("");
+            const inputRef = useRef(null);
+
+            const getValue = () => {
+                let current = state.content;
+                for (const key of path) {
+                    current = current[key];
+                }
+                return current || "";
+            };
+
+            const updateValue = (newValue) => {
+                const next = { ...state };
+                let target = next.content;
+                for (let i = 0; i < path.length - 1; i++) {
+                    target = target[path[i]];
+                }
+                target[path[path.length - 1]] = newValue;
+                setState(next);
+                saveState(next);
+            };
+
+            const handleClick = () => {
+                if (!isAuthed) return;
+                setValue(getValue());
+                setEditing(true);
+                setTimeout(() => inputRef.current?.focus(), 100);
+            };
+
+            const handleSave = () => {
+                updateValue(value);
+                setEditing(false);
+            };
+
+            const handleKeyDown = (e) => {
+                if (e.key === "Enter" && !multiline) {
+                    e.preventDefault();
+                    handleSave();
+                }
+                if (e.key === "Escape") {
+                    setEditing(false);
+                }
+            };
+
+            if (editing) {
+                const InputComponent = multiline ? "textarea" : "input";
+                return React.createElement(InputComponent, {
+                    ref: inputRef,
+                    value: value,
+                    onChange: (e) => setValue(e.target.value),
+                    onKeyDown: handleKeyDown,
+                    onBlur: handleSave,
+                    className: classNames(className, "bg-yellow-50 border-2 border-yellow-400 rounded px-2 py-1"),
+                    style: { ...style, minHeight: multiline ? "100px" : "auto" },
+                    rows: multiline ? 4 : undefined,
+                });
+            }
+
+            return React.createElement("div", {
+                onClick: handleClick,
+                className: classNames(
+                    className,
+                    isAuthed && "cursor-pointer hover:bg-yellow-50 hover:bg-opacity-30 transition-colors rounded px-1 -mx-1"
+                ),
+                style: style,
+                title: isAuthed ? "Click to edit" : undefined,
+            }, children || getValue());
+        }
+
+        // -------------------- Components --------------------
+        function Container({ children, theme, className = "" }) {
+            return React.createElement("div", {
+                className: classNames("mx-auto px-6 md:px-8 lg:px-12", className),
+                style: { maxWidth: 1400, color: theme.colors.text }
+            }, children);
+        }
+
+        function AdminPanel({ state, setState }) {
+            const { theme } = state;
+            const [showLogin, setShowLogin] = useState(false);
+            const [pw, setPw] = useState("");
+            const { isAuthed, login, logout } = useAdmin();
+
+            if (!isAuthed) {
+                return React.createElement("div", null,
+                    React.createElement("div", { className: "fixed bottom-6 right-6 z-50" },
+                        React.createElement("button", {
+                            onClick: () => setShowLogin(true),
+                            className: "px-6 py-3 rounded-full shadow-lg border text-sm font-medium",
+                            style: {
+                                background: theme.colors.accent,
+                                color: theme.colors.background,
+                                borderColor: theme.colors.secondary,
+                            }
+                        }, "Admin Login")
+                    ),
+                    showLogin && React.createElement("div", {
+                        className: "fixed inset-0 z-50 flex items-center justify-center p-4",
+                        style: { background: "rgba(10, 13, 26, 0.5)" }
+                    },
+                        React.createElement("div", {
+                            className: "bg-white rounded-2xl p-8 max-w-sm w-full shadow-2xl"
+                        },
+                            React.createElement("h3", {
+                                className: "text-xl font-semibold mb-4",
+                                style: { color: theme.colors.primary }
+                            }, "Admin Access"),
+                            React.createElement("input", {
+                                type: "password",
+                                placeholder: "Enter password",
+                                className: "w-full border rounded-xl px-4 py-3 mb-4",
+                                value: pw,
+                                onChange: (e) => setPw(e.target.value),
+                                onKeyDown: (e) => e.key === "Enter" && (login(pw) ? setShowLogin(false) : alert("Incorrect password"))
+                            }),
+                            React.createElement("div", { className: "flex gap-3" },
+                                React.createElement("button", {
+                                    onClick: () => setShowLogin(false),
+                                    className: "flex-1 px-4 py-3 rounded-xl border",
+                                    style: { borderColor: theme.colors.primary }
+                                }, "Cancel"),
+                                React.createElement("button", {
+                                    onClick: () => {
+                                        if (login(pw)) {
+                                            setShowLogin(false);
+                                        } else {
+                                            alert("Incorrect password");
+                                        }
+                                    },
+                                    className: "flex-1 px-4 py-3 rounded-xl text-white",
+                                    style: { background: theme.colors.primary }
+                                }, "Login")
+                            )
+                        )
+                    )
+                );
+            }
+
+            return React.createElement("div", { className: "fixed bottom-6 right-6 z-50 flex flex-col gap-3" },
+                React.createElement("div", {
+                    className: "px-4 py-2 rounded-full shadow-lg text-sm font-medium",
+                    style: { background: theme.colors.accent, color: theme.colors.background }
+                }, "Admin Mode: Click any text to edit"),
+                React.createElement("button", {
+                    onClick: logout,
+                    className: "px-4 py-2 rounded-full shadow-lg border text-sm",
+                    style: { background: "white", borderColor: theme.colors.primary }
+                }, "Logout")
+            );
+        }
+
+        function Nav({ theme, content, route, setRoute }) {
+            const scrollToContact = () => {
+                if (route === "/about") {
+                    document.getElementById("contact-section")?.scrollIntoView({ behavior: "smooth" });
+                } else {
+                    setRoute("/about");
+                    setTimeout(() => {
+                        document.getElementById("contact-section")?.scrollIntoView({ behavior: "smooth" });
+                    }, 100);
+                }
+            };
+
+            return React.createElement("div", {
+                className: "w-full sticky top-0 z-40 backdrop-blur-md supports-[backdrop-filter]:bg-white/80",
+                style: { background: "rgba(254, 255, 254, 0.8)", borderBottom: `1px solid ${theme.colors.muted}` }
+            },
+                React.createElement(Container, { theme },
+                    React.createElement("div", { className: "flex items-center justify-between py-6" },
+                        React.createElement("div", { className: "flex items-center gap-4" },
+                            React.createElement("div", { className: "relative" },
+                                React.createElement("div", {
+                                    className: "w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg border",
+                                    style: {
+                                        background: `linear-gradient(135deg, ${theme.colors.accent}, ${theme.colors.secondary})`,
+                                        borderColor: theme.colors.secondary,
+                                    }
+                                },
+                                    React.createElement("span", {
+                                        className: "text-white font-bold text-lg",
+                                        style: { fontFamily: theme.typography.headingFamily }
+                                    }, content.brand.logoText)
+                                ),
+                                React.createElement("div", {
+                                    className: "absolute -bottom-1 -right-1 w-4 h-4 rounded-full",
+                                    style: { background: theme.colors.accent }
+                                })
+                            ),
+                            React.createElement("div", null,
+                                React.createElement("div", {
+                                    className: "font-bold text-xl tracking-tight",
+                                    style: { fontFamily: theme.typography.headingFamily, color: theme.colors.primary }
+                                }, content.brand.name),
+                                React.createElement("div", {
+                                    className: "text-sm opacity-70",
+                                    style: { color: theme.colors.secondary }
+                                }, "Since 1985")
+                            )
+                        ),
+                        React.createElement("div", { className: "flex items-center gap-8" },
+                            React.createElement("button", {
+                                onClick: () => setRoute("/"),
+                                className: classNames("text-sm font-medium transition-colors",
+                                    route === "/" ? "opacity-100" : "opacity-70 hover:opacity-100"),
+                                style: { color: theme.colors.primary }
+                            }, "Home"),
+                            React.createElement("button", {
+                                onClick: () => setRoute("/about"),
+                                className: classNames("text-sm font-medium transition-colors",
+                                    route === "/about" ? "opacity-100" : "opacity-70 hover:opacity-100"),
+                                style: { color: theme.colors.primary }
+                            }, "About"),
+                            React.createElement("button", {
+                                onClick: scrollToContact,
+                                className: "text-sm font-medium px-6 py-3 rounded-full shadow-md border transition-all hover:shadow-lg",
+                                style: {
+                                    background: theme.colors.primary,
+                                    color: "white",
+                                    borderColor: theme.colors.primary,
+                                }
+                            }, "Contact")
+                        )
+                    )
+                )
+            );
+        }
+
+        function Hero({ theme, content, setRoute, state, setState }) {
+            return React.createElement("div", {
+                className: "relative overflow-hidden",
+                style: { background: `linear-gradient(135deg, ${theme.colors.background}, ${theme.colors.lightGold})` }
+            },
+                React.createElement("div", { className: "absolute inset-0", "aria-hidden": true },
+                    React.createElement("div", {
+                        className: "absolute top-20 right-10 w-96 h-96 rounded-full blur-3xl opacity-10",
+                        style: { background: theme.colors.accent }
+                    }),
+                    React.createElement("div", {
+                        className: "absolute -bottom-20 -left-20 w-80 h-80 rounded-full blur-3xl opacity-10",
+                        style: { background: theme.colors.secondary }
+                    })
+                ),
+                React.createElement(Container, { theme },
+                    React.createElement("div", { className: "grid grid-cols-1 lg:grid-cols-2 items-center gap-16 py-24 md:py-32" },
+                        React.createElement("div", { className: "space-y-8 fade-in" },
+                            React.createElement("div", null,
+                                React.createElement("div", {
+                                    className: "inline-block px-4 py-2 rounded-full text-sm font-medium mb-6",
+                                    style: { background: theme.colors.lightGold, color: theme.colors.secondary }
+                                }, "✨ Handcrafted Excellence Since 1985"),
+                                React.createElement(EditableText, {
+                                    path: ["hero", "title"],
+                                    state: state,
+                                    setState: setState,
+                                    className: "block leading-tight font-bold mb-6",
+                                    style: {
+                                        fontFamily: theme.typography.headingFamily,
+                                        fontSize: theme.typography.h1Size,
+                                        color: theme.colors.primary,
+                                        whiteSpace: "pre-line"
+                                    }
+                                }, content.hero?.title || "Masterful sculptures\nfor luxury interiors"),
+                                React.createElement(EditableText, {
+                                    path: ["hero", "subtitle"],
+                                    state: state,
+                                    setState: setState,
+                                    className: "block text-xl opacity-80 mb-8",
+                                    style: { color: theme.colors.text }
+                                }, content.hero?.subtitle || "Where ancient artistry meets contemporary elegance")
+                            ),
+                            React.createElement("div", { className: "flex flex-col sm:flex-row gap-4" },
+                                React.createElement("button", {
+                                    onClick: () => setRoute("/about"),
+                                    className: "px-8 py-4 rounded-full border-2 font-medium transition-all hover:shadow-lg hover-lift",
+                                    style: {
+                                        borderColor: theme.colors.primary,
+                                        color: theme.colors.primary,
+                                    }
+                                }, "Our Story"),
+                                React.createElement("button", {
+                                    onClick: () => {
+                                        setRoute("/about");
+                                        setTimeout(() => {
+                                            document.getElementById("contact-section")?.scrollIntoView({ behavior: "smooth" });
+                                        }, 100);
+                                    },
+                                    className: "px-8 py-4 rounded-full shadow-lg font-medium transition-all hover:shadow-xl hover-lift gradient-bg",
+                                    style: { color: theme.colors.background }
+                                }, content.brand.ctaText)
+                            )
+                        ),
+                        React.createElement("div", { className: "grid grid-cols-6 gap-4 slide-up" },
+                            content.gallery.images.slice(0, 6).map((src, i) =>
+                                React.createElement("div", {
+                                    key: i,
+                                    className: classNames(
+                                        "rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-500 hover-lift",
+                                        i === 0 ? "col-span-4 row-span-2 h-64" :
+                                        i === 1 ? "col-span-2 h-32" :
+                                        i === 2 ? "col-span-2 h-32" :
+                                        i === 3 ? "col-span-3 h-40" :
+                                        i === 4 ? "col-span-3 h-40" :
+                                        "col-span-6 h-32"
+                                    )
+                                },
+                                    React.createElement("img", {
+                                        src: src,
+                                        alt: `Sculpture ${i + 1}`,
+                                        className: "w-full h-full object-cover"
+                                    })
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+        }
+
+        function WhatWeDo({ theme, content, state, setState }) {
+            return React.createElement("div", {
+                className: "py-24 md:py-32",
+                style: { background: theme.colors.muted }
+            },
+                React.createElement(Container, { theme },
+                    React.createElement("div", { className: "text-center mb-16" },
+                        React.createElement(EditableText, {
+                            path: ["whatWeDo", "title"],
+                            state: state,
+                            setState: setState,
+                            className: "block font-bold mb-4",
+                            style: {
+                                fontFamily: theme.typography.headingFamily,
+                                fontSize: theme.typography.h2Size,
+                                color: theme.colors.primary,
+                            }
+                        }, content.whatWeDo.title),
+                        React.createElement(EditableText, {
+                            path: ["whatWeDo", "subtitle"],
+                            state: state,
+                            setState: setState,
+                            className: "block text-xl opacity-70 max-w-2xl mx-auto"
+                        }, content.whatWeDo.subtitle)
+                    ),
+                    React.createElement("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-8" },
+                        content.whatWeDo.points.map((point, idx) =>
+                            React.createElement("div", { key: idx, className: "group slide-up" },
+                                React.createElement("div", {
+                                    className: "bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 hover-lift border",
+                                    style: { borderColor: theme.colors.lightGold }
+                                },
+                                    React.createElement("div", {
+                                        className: "w-16 h-16 rounded-2xl flex items-center justify-center mb-6 shadow-md gradient-bg"
+                                    },
+                                        React.createElement("span", {
+                                            className: "text-white font-bold text-xl"
+                                        }, String(idx + 1).padStart(2, '0'))
+                                    ),
+                                    React.createElement(EditableText, {
+                                        path: ["whatWeDo", "points", idx, "title"],
+                                        state: state,
+                                        setState: setState,
+                                        className: "block font-semibold text-xl mb-4",
+                                        style: {
+                                            fontFamily: theme.typography.headingFamily,
+                                            color: theme.colors.primary,
+                                        }
+                                    }, point.title),
+                                    React.createElement(EditableText, {
+                                        path: ["whatWeDo", "points", idx, "text"],
+                                        state: state,
+                                        setState: setState,
+                                        multiline: true,
+                                        className: "block opacity-80 leading-relaxed"
+                                    }, point.text)
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+        }
+
+        function Gallery({ theme, content, state, setState }) {
+            return React.createElement("div", { className: "py-24 md:py-32" },
+                React.createElement(Container, { theme },
+                    React.createElement("div", { className: "text-center mb-16" },
+                        React.createElement(EditableText, {
+                            path: ["gallery", "title"],
+                            state: state,
+                            setState: setState,
+                            className: "block font-bold mb-4",
+                            style: {
+                                fontFamily: theme.typography.headingFamily,
+                                fontSize: theme.typography.h2Size,
+                                color: theme.colors.primary,
+                            }
+                        }, content.gallery.title),
+                        React.createElement(EditableText, {
+                            path: ["gallery", "subtitle"],
+                            state: state,
+                            setState: setState,
+                            className: "block text-xl opacity-70"
+                        }, content.gallery.subtitle)
+                    ),
+                    React.createElement("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16" },
+                        content.gallery.images.map((src, i) =>
+                            React.createElement("div", { key: i, className: "group cursor-pointer slide-up" },
+                                React.createElement("div", { className: "rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-700 hover-lift" },
+                                    React.createElement("img", {
+                                        src: src,
+                                        alt: `Signature piece ${i + 1}`,
+                                        className: "w-full h-80 object-cover group-hover:scale-105 transition-transform duration-700"
+                                    }),
+                                    React.createElement("div", { className: "p-6 bg-white" },
+                                        React.createElement("div", {
+                                            className: "text-sm font-medium mb-1",
+                                            style: { color: theme.colors.accent }
+                                        }, `Collection ${String(i + 1).padStart(2, '0')}`),
+                                        React.createElement("div", {
+                                            className: "font-semibold",
+                                            style: { color: theme.colors.primary }
+                                        }, "Handcrafted Masterpiece")
+                                    )
+                                )
+                            )
+                        )
+                    ),
+                    React.createElement("div", {
+                        className: "text-center rounded-3xl p-12 shadow-2xl gradient-bg"
+                    },
+                        React.createElement("div", { className: "text-white text-sm font-medium uppercase tracking-wider mb-3 opacity-90" }, "Ready for Your Commission?"),
+                        React.createElement("div", {
+                            className: "text-white font-bold text-2xl mb-6",
+                            style: { fontFamily: theme.typography.headingFamily }
+                        }, "Let's Create Something Extraordinary"),
+                        React.createElement("button", {
+                            onClick: () => {
+                                window.location.hash = "/about";
+                                setTimeout(() => {
+                                    document.getElementById("contact-section")?.scrollIntoView({ behavior: "smooth" });
+                                }, 100);
+                            },
+                            className: "px-8 py-4 rounded-full font-medium shadow-lg hover:shadow-xl transition-all hover-lift",
+                            style: { background: theme.colors.accent, color: theme.colors.background }
+                        }, "Begin Your Journey")
+                    )
+                )
+            );
+        }
+
+        function About({ theme, content, state, setState }) {
+            return React.createElement("div", { className: "py-24 md:py-32" },
+                React.createElement(Container, { theme },
+                    React.createElement("div", { className: "max-w-4xl mx-auto mb-24" },
+                        React.createElement("div", { className: "text-center mb-12" },
+                            React.createElement(EditableText, {
+                                path: ["about", "title"],
+                                state: state,
+                                setState: setState,
+                                className: "block font-bold mb-4",
+                                style: {
+                                    fontFamily: theme.typography.headingFamily,
+                                    fontSize: theme.typography.h2Size,
+                                    color: theme.colors.primary,
+                                }
+                            }, content.about.title),
+                            React.createElement(EditableText, {
+                                path: ["about", "subtitle"],
+                                state: state,
+                                setState: setState,
+                                className: "block text-xl opacity-70"
+                            }, content.about.subtitle)
+                        ),
+                        React.createElement("div", { className: "prose prose-lg max-w-none fade-in" },
+                            React.createElement(EditableText, {
+                                path: ["about", "story"],
+                                state: state,
+                                setState: setState,
+                                multiline: true,
+                                className: "block text-lg leading-relaxed opacity-90",
+                                style: { whiteSpace: "pre-line" }
+                            }, content.about.story)
+                        )
+                    ),
+                    React.createElement("div", { className: "mb-24" },
+                        React.createElement("div", { className: "text-center mb-16" },
+                            React.createElement(EditableText, {
+                                path: ["about", "process", "title"],
+                                state: state,
+                                setState: setState,
+                                className: "block font-bold",
+                                style: {
+                                    fontFamily: theme.typography.headingFamily,
+                                    fontSize: theme.typography.h3Size,
+                                    color: theme.colors.primary,
+                                }
+                            }, content.about.process.title)
+                        ),
+                        React.createElement("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" },
+                            content.about.process.steps.map((step, idx) =>
+                                React.createElement("div", { key: idx, className: "relative slide-up" },
+                                    React.createElement("div", {
+                                        className: "bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border hover-lift",
+                                        style: { borderColor: theme.colors.lightGold }
+                                    },
+                                        React.createElement("div", { className: "flex items-center mb-4" },
+                                            React.createElement("div", {
+                                                className: "w-12 h-12 rounded-full flex items-center justify-center text-white font-bold mr-4 gradient-bg"
+                                            }, step.step),
+                                            React.createElement(EditableText, {
+                                                path: ["about", "process", "steps", idx, "title"],
+                                                state: state,
+                                                setState: setState,
+                                                className: "font-semibold text-lg",
+                                                style: { color: theme.colors.primary, fontFamily: theme.typography.headingFamily }
+                                            }, step.title)
+                                        ),
+                                        React.createElement(EditableText, {
+                                            path: ["about", "process", "steps", idx, "description"],
+                                            state: state,
+                                            setState: setState,
+                                            multiline: true,
+                                            className: "opacity-80 text-sm leading-relaxed"
+                                        }, step.description)
+                                    )
+                                )
+                            )
+                        )
+                    ),
+                    React.createElement("div", { id: "contact-section", className: "scroll-mt-20" },
+                        React.createElement("div", {
+                            className: "rounded-3xl p-12 shadow-2xl",
+                            style: { background: `linear-gradient(135deg, ${theme.colors.lightGold}, ${theme.colors.muted})` }
+                        },
+                            React.createElement("div", { className: "grid grid-cols-1 lg:grid-cols-2 gap-12" },
+                                React.createElement("div", null,
+                                    React.createElement(EditableText, {
+                                        path: ["contact", "title"],
+                                        state: state,
+                                        setState: setState,
+                                        className: "block font-bold mb-4",
+                                        style: {
+                                            fontFamily: theme.typography.headingFamily,
+                                            fontSize: theme.typography.h3Size,
+                                            color: theme.colors.primary,
+                                        }
+                                    }, content.contact.title),
+                                    React.createElement(EditableText, {
+                                        path: ["contact", "subtitle"],
+                                        state: state,
+                                        setState: setState,
+                                        className: "block text-lg opacity-80 mb-8"
+                                    }, content.contact.subtitle),
+                                    React.createElement("div", { className: "space-y-4" },
+                                        React.createElement("div", { className: "flex items-center" },
+                                            React.createElement("div", {
+                                                className: "w-12 h-12 rounded-xl flex items-center justify-center mr-4",
+                                                style: { background: theme.colors.accent }
+                                            },
+                                                React.createElement("span", { className: "text-white text-lg" }, "📧")
+                                            ),
+                                            React.createElement("div", null,
+                                                React.createElement("div", { className: "text-sm opacity-70" }, "Email"),
+                                                React.createElement(EditableText, {
+                                                    path: ["contact", "email"],
+                                                    state: state,
+                                                    setState: setState,
+                                                    className: "font-medium"
+                                                },
+                                                    React.createElement("a", {
+                                                        href: `mailto:${content.contact.email}`,
+                                                        className: "hover:underline"
+                                                    }, content.contact.email)
+                                                )
+                                            )
+                                        ),
+                                        React.createElement("div", { className: "flex items-center" },
+                                            React.createElement("div", {
+                                                className: "w-12 h-12 rounded-xl flex items-center justify-center mr-4",
+                                                style: { background: theme.colors.accent }
+                                            },
+                                                React.createElement("span", { className: "text-white text-lg" }, "📞")
+                                            ),
+                                            React.createElement("div", null,
+                                                React.createElement("div", { className: "text-sm opacity-70" }, "Phone"),
+                                                React.createElement(EditableText, {
+                                                    path: ["contact", "phone"],
+                                                    state: state,
+                                                    setState: setState,
+                                                    className: "font-medium"
+                                                },
+                                                    React.createElement("a", {
+                                                        href: `tel:${content.contact.phone}`,
+                                                        className: "hover:underline"
+                                                    }, content.contact.phone)
+                                                )
+                                            )
+                                        ),
+                                        React.createElement("div", { className: "flex items-center" },
+                                            React.createElement("div", {
+                                                className: "w-12 h-12 rounded-xl flex items-center justify-center mr-4",
+                                                style: { background: theme.colors.accent }
+                                            },
+                                                React.createElement("span", { className: "text-white text-lg" }, "📍")
+                                            ),
+                                            React.createElement("div", null,
+                                                React.createElement("div", { className: "text-sm opacity-70" }, "Atelier"),
+                                                React.createElement(EditableText, {
+                                                    path: ["contact", "address"],
+                                                    state: state,
+                                                    setState: setState,
+                                                    multiline: true,
+                                                    className: "font-medium",
+                                                    style: { whiteSpace: "pre-line" }
+                                                }, content.contact.address)
+                                            )
+                                        ),
+                                        React.createElement("div", { className: "flex gap-4 pt-4" },
+                                            React.createElement("a", {
+                                                href: content.contact.instagram,
+                                                target: "_blank",
+                                                rel: "noreferrer",
+                                                className: "px-6 py-3 rounded-xl border font-medium hover:shadow-lg transition-all",
+                                                style: {
+                                                    borderColor: theme.colors.primary,
+                                                    color: theme.colors.primary,
+                                                }
+                                            }, "Instagram"),
+                                            React.createElement("a", {
+                                                href: content.contact.linkedin,
+                                                target: "_blank",
+                                                rel: "noreferrer",
+                                                className: "px-6 py-3 rounded-xl border font-medium hover:shadow-lg transition-all",
+                                                style: {
+                                                    borderColor: theme.colors.primary,
+                                                    color: theme.colors.primary,
+                                                }
+                                            }, "LinkedIn")
+                                        )
+                                    )
+                                ),
+                                React.createElement(ContactForm, { theme })
+                            )
+                        )
+                    )
+                )
+            );
+        }
+
+        function ContactForm({ theme }) {
+            const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
+            const [sent, setSent] = useState(false);
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                console.log("Contact form submitted", form);
+                setSent(true);
+                setTimeout(() => setSent(false), 5000);
+            };
+
+            return React.createElement("div", { className: "bg-white rounded-2xl p-8 shadow-xl fade-in" },
+                React.createElement("form", { onSubmit: handleSubmit, className: "space-y-6" },
+                    React.createElement("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4" },
+                        React.createElement("div", null,
+                            React.createElement("label", {
+                                className: "block text-sm font-medium mb-2",
+                                style: { color: theme.colors.primary }
+                            }, "Full Name *"),
+                            React.createElement("input", {
+                                required: true,
+                                type: "text",
+                                className: "w-full border rounded-xl px-4 py-3 focus:ring-2 focus:outline-none transition-all",
+                                style: { borderColor: theme.colors.muted },
+                                value: form.name,
+                                onChange: (e) => setForm({ ...form, name: e.target.value })
+                            })
+                        ),
+                        React.createElement("div", null,
+                            React.createElement("label", {
+                                className: "block text-sm font-medium mb-2",
+                                style: { color: theme.colors.primary }
+                            }, "Email Address *"),
+                            React.createElement("input", {
+                                required: true,
+                                type: "email",
+                                className: "w-full border rounded-xl px-4 py-3 focus:ring-2 focus:outline-none transition-all",
+                                style: { borderColor: theme.colors.muted },
+                                value: form.email,
+                                onChange: (e) => setForm({ ...form, email: e.target.value })
+                            })
+                        )
+                    ),
+                    React.createElement("div", null,
+                        React.createElement("label", {
+                            className: "block text-sm font-medium mb-2",
+                            style: { color: theme.colors.primary }
+                        }, "Phone Number"),
+                        React.createElement("input", {
+                            type: "tel",
+                            className: "w-full border rounded-xl px-4 py-3 focus:ring-2 focus:outline-none transition-all",
+                            style: { borderColor: theme.colors.muted },
+                            value: form.phone,
+                            onChange: (e) => setForm({ ...form, phone: e.target.value })
+                        })
+                    ),
+                    React.createElement("div", null,
+                        React.createElement("label", {
+                            className: "block text-sm font-medium mb-2",
+                            style: { color: theme.colors.primary }
+                        }, "Project Details *"),
+                        React.createElement("textarea", {
+                            required: true,
+                            rows: 5,
+                            className: "w-full border rounded-xl px-4 py-3 focus:ring-2 focus:outline-none transition-all resize-none",
+                            style: { borderColor: theme.colors.muted },
+                            placeholder: "Tell us about your space, vision, and requirements...",
+                            value: form.message,
+                            onChange: (e) => setForm({ ...form, message: e.target.value })
+                        })
+                    ),
+                    React.createElement("button", {
+                        type: "submit",
+                        className: "w-full px-6 py-4 rounded-xl font-medium shadow-lg hover:shadow-xl transition-all hover-lift gradient-bg",
+                        style: { color: theme.colors.background }
+                    }, "Send Enquiry"),
+                    sent && React.createElement("div", {
+                        className: "text-center p-4 rounded-xl fade-in",
+                        style: { background: theme.colors.lightGold, color: theme.colors.primary }
+                    },
+                        React.createElement("div", { className: "font-medium" }, "Thank you for your enquiry!"),
+                        React.createElement("div", { className: "text-sm opacity-80" }, "We'll respond within 24 hours.")
+                    )
+                )
+            );
+        }
+
+        function Footer({ theme, content }) {
+            return React.createElement("div", {
+                className: "py-16 border-t",
+                style: { borderColor: theme.colors.muted, background: theme.colors.primary }
+            },
+                React.createElement(Container, { theme },
+                    React.createElement("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-8 text-white" },
+                        React.createElement("div", null,
+                            React.createElement("div", { className: "flex items-center gap-3 mb-4" },
+                                React.createElement("div", {
+                                    className: "w-10 h-10 rounded-xl flex items-center justify-center",
+                                    style: { background: theme.colors.accent }
+                                },
+                                    React.createElement("span", { className: "font-bold" }, content.brand.logoText)
+                                ),
+                                React.createElement("span", {
+                                    className: "font-bold text-lg",
+                                    style: { fontFamily: theme.typography.headingFamily }
+                                }, content.brand.name)
+                            ),
+                            React.createElement("p", { className: "text-sm opacity-80 leading-relaxed" }, "Handcrafted sculptures for distinguished spaces. Three generations of artistry and passion.")
+                        ),
+                        React.createElement("div", null,
+                            React.createElement("h4", { className: "font-semibold mb-4" }, "Quick Links"),
+                            React.createElement("div", { className: "space-y-2 text-sm" },
+                                React.createElement("a", {
+                                    href: "#/",
+                                    className: "block opacity-80 hover:opacity-100 transition-opacity"
+                                }, "Home"),
+                                React.createElement("a", {
+                                    href: "#/about",
+                                    className: "block opacity-80 hover:opacity-100 transition-opacity"
+                                }, "About"),
+                                React.createElement("a", {
+                                    href: "#/about",
+                                    onClick: () => setTimeout(() => document.getElementById("contact-section")?.scrollIntoView({ behavior: "smooth" }), 100),
+                                    className: "block opacity-80 hover:opacity-100 transition-opacity"
+                                }, "Contact")
+                            )
+                        ),
+                        React.createElement("div", null,
+                            React.createElement("h4", { className: "font-semibold mb-4" }, "Get in Touch"),
+                            React.createElement("div", { className: "space-y-2 text-sm" },
+                                React.createElement("a", {
+                                    href: `mailto:${content.contact.email}`,
+                                    className: "block opacity-80 hover:opacity-100 transition-opacity"
+                                }, content.contact.email),
+                                React.createElement("a", {
+                                    href: `tel:${content.contact.phone}`,
+                                    className: "block opacity-80 hover:opacity-100 transition-opacity"
+                                }, content.contact.phone),
+                                React.createElement("div", {
+                                    className: "opacity-80",
+                                    style: { whiteSpace: "pre-line" }
+                                }, content.contact.address)
+                            )
+                        )
+                    ),
+                    React.createElement("div", {
+                        className: "border-t mt-12 pt-8 flex flex-col md:flex-row items-center justify-between text-sm opacity-60",
+                        style: { borderColor: "rgba(255,255,255,0.1)" }
+                    },
+                        React.createElement("div", null, `© ${new Date().getFullYear()} ${content.brand.name}. All rights reserved.`),
+                        React.createElement("div", null, "Crafted with passion in Rajasthan, India")
+                    )
+                )
+            );
+        }
+
+        // -------------------- Main App --------------------
+        function App() {
+            const [state, setState] = useState(loadState());
+            const { theme, content } = state;
+            const [route, setRoute] = useState(window.location.hash.replace("#", "") || "/");
+
+            useEffect(() => {
+                const onHash = () => setRoute(window.location.hash.replace("#", "") || "/");
+                window.addEventListener("hashchange", onHash);
+                return () => window.removeEventListener("hashchange", onHash);
+            }, []);
+
+            useEffect(() => {
+                document.body.style.background = theme.colors.background;
+                document.body.style.color = theme.colors.text;
+                document.body.style.fontFamily = theme.typography.bodyFamily;
+                document.body.style.fontSize = theme.typography.bodySize + "px";
+            }, [theme]);
+
+            const Page = useMemo(() => {
+                if (route === "/about") {
+                    return React.createElement(About, { theme, content, state, setState });
+                }
+                return React.createElement(React.Fragment, null,
+                    React.createElement(Hero, { theme, content, setRoute: (r) => { window.location.hash = r; }, state, setState }),
+                    React.createElement(WhatWeDo, { theme, content, state, setState }),
+                    React.createElement(Gallery, { theme, content, state, setState })
+                );
+            }, [route, theme, content, state]);
+
+            return React.createElement("div", { style: { minHeight: "100vh" } },
+                React.createElement(Nav, { theme, content, route, setRoute: (r) => { window.location.hash = r; } }),
+                Page,
+                React.createElement(Footer, { theme, content }),
+                React.createElement(AdminPanel, { state, setState })
+            );
+        }
+
+        // Initialize the app
+        ReactDOM.render(React.createElement(App), document.getElementById('root'));
+    </script>
+</body>
+</html>
